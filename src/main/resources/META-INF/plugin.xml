@@ -9,7 +9,6 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.djrasmusp.oklchconverter.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.djrasmusp.oklchconverter.startup.MyProjectActivity" />
+        <toolWindow factoryClass="com.github.djrasmusp.oklchconverter.toolWindow.MyToolWindowFactory" id="OKLCH Converter"/>
     </extensions>
 </idea-plugin>
