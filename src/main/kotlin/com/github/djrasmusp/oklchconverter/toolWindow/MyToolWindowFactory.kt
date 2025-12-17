@@ -1,23 +1,24 @@
 package com.github.djrasmusp.oklchconverter.toolWindow
 
+import com.github.djrasmusp.oklchconverter.MyBundle
+import com.github.djrasmusp.oklchconverter.services.ColorConversionService
 import com.intellij.openapi.components.service
-import com.intellij.openapi.diagnostic.thisLogger
+import com.intellij.openapi.ide.CopyPasteManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
+import com.intellij.ui.JBColor
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
+import com.intellij.ui.components.JBTextField
 import com.intellij.ui.content.ContentFactory
-import com.github.djrasmusp.oklchconverter.MyBundle
-import com.github.djrasmusp.oklchconverter.services.MyProjectService
+import com.intellij.util.ui.FormBuilder
+import java.awt.datatransfer.StringSelection
 import javax.swing.JButton
+import javax.swing.JPanel
 
 
 class MyToolWindowFactory : ToolWindowFactory {
-
-    init {
-        thisLogger().warn("Don't forget to remove all non-needed sample code files with their corresponding registration entries in `plugin.xml`.")
-    }
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val myToolWindow = MyToolWindow(toolWindow)
@@ -29,17 +30,52 @@ class MyToolWindowFactory : ToolWindowFactory {
 
     class MyToolWindow(toolWindow: ToolWindow) {
 
-        private val service = toolWindow.project.service<MyProjectService>()
+        private val service = toolWindow.project.service<ColorConversionService>()
 
-        fun getContent() = JBPanel<JBPanel<*>>().apply {
-            val label = JBLabel(MyBundle.message("randomLabel", "?"))
+        fun getContent(): JPanel {
+            val input = JBTextField()
+            val output = JBTextField().apply { isEditable = false }
+            val errorLabel = JBLabel().apply { foreground = JBColor.RED }
+            val copyButton = JButton(MyBundle.message("copy")).apply { isEnabled = false }
 
-            add(label)
-            add(JButton(MyBundle.message("shuffle")).apply {
-                addActionListener {
-                    label.text = MyBundle.message("randomLabel", service.getRandomNumber())
+            fun convertAndRender() {
+                val text = input.text
+                val result = runCatching { service.convert(text) }
+                result.onSuccess {
+                    output.text = it
+                    errorLabel.text = ""
+                    copyButton.isEnabled = true
+                }.onFailure { throwable ->
+                    output.text = ""
+                    copyButton.isEnabled = false
+                    errorLabel.text = throwable.message ?: MyBundle.message("errorUnknown")
                 }
-            })
+            }
+
+            val convertButton = JButton(MyBundle.message("convert")).apply {
+                addActionListener { convertAndRender() }
+            }
+
+            input.addActionListener { convertAndRender() }
+
+            copyButton.addActionListener {
+                CopyPasteManager.getInstance().setContents(StringSelection(output.text))
+                errorLabel.text = MyBundle.message("copied")
+            }
+
+            val panel = FormBuilder.createFormBuilder()
+                .addLabeledComponent(JBLabel(MyBundle.message("inputLabel")), input)
+                .addComponent(
+                    JBPanel<JBPanel<*>>().apply {
+                        add(convertButton)
+                        add(copyButton)
+                    }
+                )
+                .addLabeledComponent(JBLabel(MyBundle.message("outputLabel")), output)
+                .addComponent(errorLabel)
+                .panel
+
+            return JBPanel<JBPanel<*>>().apply { add(panel) }
         }
     }
 }
