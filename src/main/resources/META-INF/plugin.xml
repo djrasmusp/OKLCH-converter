@@ -16,7 +16,8 @@
     <actions>
         <action id="com.github.djrasmusp.oklchconverter.ConvertColorAction"
                 class="com.github.djrasmusp.oklchconverter.actions.ConvertColorAction"
-                text="Convert to OKLCH">
+                text="Convert to OKLCH"
+                icon="/icons/oklch.svg">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>
