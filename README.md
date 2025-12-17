@@ -1,8 +1,8 @@
 # OKLCH-converter
 
 ![Build](https://github.com/djrasmusp/OKLCH-converter/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/29405.svg)](https://plugins.jetbrains.com/plugin/29405)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/29405.svg)](https://plugins.jetbrains.com/plugin/29405)
+[![Version](https://img.shields.io/jetbrains/plugin/v/29405-oklch-converter.svg)](https://plugins.jetbrains.com/plugin/29405-oklch-converter)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/29405-oklch-converter.svg)](https://plugins.jetbrains.com/plugin/29405-oklch-converter)
 
 ## What it does
 - Converts CSS colors from `hex`, `rgb()`, and `rgba()` into `oklch()`.
