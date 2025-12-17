@@ -5,6 +5,7 @@ import java.util.Locale
 import kotlin.math.atan2
 import kotlin.math.cbrt
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 /**
@@ -98,14 +99,27 @@ class ColorConverter {
     }
 
     private fun format(oklch: Oklch): String {
-        val l = oklch.l.format()
-        val c = oklch.c.format()
-        val h = oklch.h.format()
-        val alpha = oklch.alpha.format()
-        return "oklch($l $c $h / $alpha)"
+        val l = oklch.l.formatComponent()
+        val c = oklch.c.formatComponent()
+        val h = oklch.h.formatHue()
+        val alpha = oklch.alpha
+        val base = "oklch($l $c $h"
+        return if (alpha.isOpaque()) "$base)" else "$base / ${alpha.formatAlpha()})"
     }
 
-    private fun Double.format(): String = String.format(Locale.US, "%.4f", this)
+    private fun Double.formatComponent(): String {
+        if (this == 0.0) return "0"
+        val raw = String.format(Locale.US, "%.2f", this)
+        return raw.trimEnd('0').trimEnd('.')
+    }
+
+    private fun Double.formatHue(): String = this.roundToInt().toString()
+
+    private fun Double.formatAlpha(): String {
+        return String.format(Locale.US, "%.2f", this)
+    }
+
+    private fun Double.isOpaque(): Boolean = this >= 0.9999
 
     companion object {
         private val HEX_PATTERN = Regex("^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$")
