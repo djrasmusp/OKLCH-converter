@@ -9,7 +9,6 @@ plugins {
     alias(libs.plugins.changelog) // Gradle Changelog Plugin
     alias(libs.plugins.qodana) // Gradle Qodana Plugin
     alias(libs.plugins.kover) // Gradle Kover Plugin
-    kotlin("jvm")
 }
 
 group = providers.gradleProperty("pluginGroup").get()
