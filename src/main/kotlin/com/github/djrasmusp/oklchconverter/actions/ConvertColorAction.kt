@@ -7,8 +7,10 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.project.Project
 
 class ConvertColorAction : AnAction(
     MyBundle.message("action.convert.text"),
@@ -32,7 +34,7 @@ class ConvertColorAction : AnAction(
         val service = project.service<ColorConversionService>()
         val result = runCatching { service.convert(selectedText) }
         result.onSuccess { converted ->
-            replaceSelection(editor, converted)
+            replaceSelection(project, editor, converted)
             selectionModel.setSelection(
                 selectionModel.selectionStart,
                 selectionModel.selectionStart + converted.length
@@ -43,14 +45,16 @@ class ConvertColorAction : AnAction(
         }
     }
 
-    private fun replaceSelection(editor: Editor, replacement: String) {
+    private fun replaceSelection(project: Project, editor: Editor, replacement: String) {
         val selectionModel = editor.selectionModel
         val start = selectionModel.selectionStart
         val end = selectionModel.selectionEnd
-        editor.document.replaceString(start, end, replacement)
+        WriteCommandAction.runWriteCommandAction(project) {
+            editor.document.replaceString(start, end, replacement)
+        }
     }
 
-    private fun notify(project: com.intellij.openapi.project.Project, message: String, type: NotificationType) {
+    private fun notify(project: Project, message: String, type: NotificationType) {
         NotificationGroupManager.getInstance()
             .getNotificationGroup("OKLCH Converter")
             .createNotification(message, type)
