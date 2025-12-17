@@ -11,4 +11,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.github.djrasmusp.oklchconverter.toolWindow.MyToolWindowFactory" id="OKLCH Converter"/>
     </extensions>
+
+    <actions>
+        <action id="com.github.djrasmusp.oklchconverter.ConvertColorAction"
+                class="com.github.djrasmusp.oklchconverter.actions.ConvertColorAction"
+                text="Convert to OKLCH">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
