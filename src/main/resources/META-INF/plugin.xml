@@ -9,7 +9,6 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.djrasmusp.oklchconverter.toolWindow.MyToolWindowFactory" id="OKLCH Converter"/>
         <notificationGroup id="OKLCH Converter" displayType="BALLOON" isLogByDefault="true"/>
     </extensions>
 
