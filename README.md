@@ -6,7 +6,6 @@
 
 ## What it does
 - Converts CSS colors from `hex`, `rgb()`, and `rgba()` into `oklch()`.
-- Shows the result in a dedicated tool window with copy-to-clipboard.
 - Handles alpha, short and long hex, and input validation with clear errors.
 
 <!-- Plugin description -->
