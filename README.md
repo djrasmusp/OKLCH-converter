@@ -9,7 +9,7 @@
 - Handles alpha, short and long hex, and input validation with clear errors.
 
 <!-- Plugin description -->
-Convert common CSS color notations (hex, rgb, rgba) to OKLCH directly inside WebStorm and other JetBrains IDEs. Open the **OKLCH Converter** tool window, paste a color, and copy the ready-to-use `oklch()` value with a single click.
+Convert common CSS color notations (hex, rgb, rgba) to OKLCH directly inside WebStorm and other JetBrains IDEs. Mark the color code and right-click and select **OKLCH Converter** and convert to `oklch()` value with a single click.
 <!-- Plugin description end -->
 
 ## Installation
