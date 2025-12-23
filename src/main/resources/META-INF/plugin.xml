@@ -4,6 +4,19 @@
     <name>OKLCH-converter</name>
     <vendor>djrasmusp</vendor>
 
+    <description><![CDATA[
+        Convert CSS colors (hex, rgb, rgba) to OKLCH format directly in your editor.
+        
+        Features:
+        • Convert hex colors (#f00, #ff0000, #f00f, #ff0000ff)
+        • Convert rgb() and rgba() color values
+        • Preserves alpha channels
+        • Input validation with clear error messages
+        • Right-click context menu integration
+        
+        Simply select a color code and choose "Convert to OKLCH" from the context menu to replace it with the oklch() equivalent.
+    ]]></description>
+
     <depends>com.intellij.modules.platform</depends>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
