@@ -5,11 +5,14 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/29405-oklch-converter.svg)](https://plugins.jetbrains.com/plugin/29405-oklch-converter)
 
 ## What it does
-- Converts CSS colors from `hex`, `rgb()`, and `rgba()` into `oklch()`.
-- Handles alpha, short and long hex, and input validation with clear errors.
+- Converts CSS colors from `hex`, `rgb()`, and `rgba()` into `oklch()` format
+- Supports short and long hex formats (e.g., `#f00`, `#ff0000`, `#f00f`, `#ff0000ff`)
+- Handles alpha channels in hex and rgba formats
+- Validates input with clear error messages
+- Replaces selected text directly in the editor with the converted `oklch()` value
 
 <!-- Plugin description -->
-Convert common CSS color notations (hex, rgb, rgba) to OKLCH directly inside WebStorm and other JetBrains IDEs. Mark the color code and right-click and select **OKLCH Converter** and convert to `oklch()` value with a single click.
+Convert common CSS color notations (hex, rgb, rgba) to OKLCH directly inside WebStorm and other JetBrains IDEs. Simply select a color code in your editor, right-click, and choose **Convert to OKLCH** from the context menu. The selected color will be instantly replaced with its `oklch()` equivalent, preserving alpha values when present.
 <!-- Plugin description end -->
 
 ## Installation
