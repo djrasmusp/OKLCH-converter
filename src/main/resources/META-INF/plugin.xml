@@ -11,10 +11,12 @@
         • Convert hex colors (#f00, #ff0000, #f00f, #ff0000ff)
         • Convert rgb() and rgba() color values
         • Preserves alpha channels
+        • Convert multiple colors at once in a selection
+        • Convert all colors in an entire file
         • Input validation with clear error messages
-        • Right-click context menu integration
+        • Right-click context menu and Tools menu integration
         
-        Simply select a color code and choose "Convert to OKLCH" from the context menu to replace it with the oklch() equivalent.
+        Simply select text containing color codes and choose "Convert to OKLCH" from the context menu to replace all colors with their oklch() equivalents. You can convert multiple colors at once by selecting a block of text, or convert all colors in a file using "Convert File Colors to OKLCH".
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
@@ -31,6 +33,15 @@
                 text="Convert to OKLCH"
                 icon="/icons/oklch.svg">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        <action id="com.github.djrasmusp.oklchconverter.ConvertFileAction"
+                class="com.github.djrasmusp.oklchconverter.actions.ConvertFileAction"
+                text="Convert File Colors to OKLCH"
+                icon="/icons/oklch.svg">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>

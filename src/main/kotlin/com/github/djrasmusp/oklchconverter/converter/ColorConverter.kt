@@ -19,10 +19,73 @@ class ColorConverter {
 
     data class ConversionResult(val input: Rgba, val oklch: Oklch, val formatted: String)
 
+    data class FileConversionResult(
+        val convertedContent: String,
+        val replacements: List<Pair<String, String>>,
+        val errors: List<String>
+    )
+
     fun convert(input: String): ConversionResult {
         val rgba = parseColor(input)
         val oklch = toOklch(rgba)
         return ConversionResult(rgba, oklch, format(oklch))
+    }
+
+    /**
+     * Scans through an entire file and converts all HEX, RGB, and RGBA color values to OKLCH.
+     * Returns the converted file content along with information about replacements and any errors.
+     */
+    fun convertFile(fileContent: String): FileConversionResult {
+        data class MatchInfo(val original: String, val converted: String, val range: IntRange)
+
+        val matches = mutableListOf<MatchInfo>()
+        val errors = mutableListOf<String>()
+
+        // Find all HEX colors (including 3, 4, 6, and 8 digit variants)
+        HEX_FIND_PATTERN.findAll(fileContent).forEach { match ->
+            val original = match.value
+            try {
+                val converted = convert(original).formatted
+                matches.add(MatchInfo(original, converted, match.range))
+            } catch (e: Exception) {
+                errors.add("Failed to convert $original: ${e.message}")
+            }
+        }
+
+        // Find all RGB colors
+        RGB_FIND_PATTERN.findAll(fileContent).forEach { match ->
+            val original = match.value
+            try {
+                val converted = convert(original).formatted
+                matches.add(MatchInfo(original, converted, match.range))
+            } catch (e: Exception) {
+                errors.add("Failed to convert $original: ${e.message}")
+            }
+        }
+
+        // Find all RGBA colors
+        RGBA_FIND_PATTERN.findAll(fileContent).forEach { match ->
+            val original = match.value
+            try {
+                val converted = convert(original).formatted
+                matches.add(MatchInfo(original, converted, match.range))
+            } catch (e: Exception) {
+                errors.add("Failed to convert $original: ${e.message}")
+            }
+        }
+
+        // Sort matches by position descending to replace from end to start
+        matches.sortByDescending { it.range.first }
+
+        // Build result string by replacing matches from end to start
+        val result = StringBuilder(fileContent)
+        val replacements = matches.map { it.original to it.converted }
+        
+        matches.forEach { match ->
+            result.replace(match.range.first, match.range.last + 1, match.converted)
+        }
+
+        return FileConversionResult(result.toString(), replacements, errors)
     }
 
     private fun parseColor(raw: String): Rgba {
@@ -122,9 +185,15 @@ class ColorConverter {
     private fun Double.isOpaque(): Boolean = this >= 0.9999
 
     companion object {
+        // Patterns for validation (anchored)
         private val HEX_PATTERN = Regex("^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$")
         private val RGB_PATTERN = Regex("^rgb\\s*\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)$", RegexOption.IGNORE_CASE)
         private val RGBA_PATTERN = Regex("^rgba\\s*\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*([0-1](?:\\.\\d+)?)\\s*\\)$", RegexOption.IGNORE_CASE)
+        
+        // Patterns for finding colors in file content (not anchored, with word boundaries where appropriate)
+        private val HEX_FIND_PATTERN = Regex("#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\\b")
+        private val RGB_FIND_PATTERN = Regex("rgb\\s*\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)", RegexOption.IGNORE_CASE)
+        private val RGBA_FIND_PATTERN = Regex("rgba\\s*\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*([0-1](?:\\.\\d+)?)\\s*\\)", RegexOption.IGNORE_CASE)
     }
 }
 
