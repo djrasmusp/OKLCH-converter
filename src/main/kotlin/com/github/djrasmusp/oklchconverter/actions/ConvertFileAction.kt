@@ -12,7 +12,6 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
 
 class ConvertFileAction : AnAction(
     MyBundle.message("action.convertFile.text"),
