@@ -16,5 +16,7 @@ class ColorConversionService(project: Project) {
     }
 
     fun convert(input: String): String = converter.convert(input).formatted
+
+    fun convertFile(fileContent: String): ColorConverter.FileConversionResult = converter.convertFile(fileContent)
 }
 
