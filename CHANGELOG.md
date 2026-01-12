@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-01-12
+
 ### Added
 - File conversion functionality: Convert all colors in an entire file to OKLCH format
 - `ConvertFileAction`: New action to convert all colors in a file via context menu or Tools menu
